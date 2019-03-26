@@ -253,7 +253,7 @@ c1.push(Nod(3));
 c1.push(Nod(4));
 c2.push(Nod(2));
 c2.push(Nod(3));
-c2.pop();
+//c2.pop();
 cout<<"Afisare coada c2 :"<<c2;
 cout<<'\n';
 cout<<"Primul element din coada  c1 : "<<*c1.getFirst()<<"\nUltimul element din coada c1 : "<<*c1.getLast();
@@ -265,8 +265,13 @@ if(c1==c2)
 else
     cout<<"Nu sunt egale \n";
 
-coada rez;
-rez=c1-c2;
-cout<<"Coada stearsa :"<<rez;
+//coada rez;
+//rez=c1-c2;
+//cout<<"Coada stearsa :"<<rez;
+//cout<<'\n';
+cout<<"coada concatenata : ";
+coada rezultat;
+rezultat=c2+c1;
+cout<<rezultat;
 return 0;
 }
