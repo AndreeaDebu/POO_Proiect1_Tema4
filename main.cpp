@@ -17,6 +17,7 @@ public:
     Nod* getNext();
     void setNext(Nod* next);
     int operator = (Nod &n);
+    int operator != (Nod &n);
     friend class coada;
     friend istream& operator>>(istream& t, Nod &n);
     friend ostream& operator<<(ostream& v, Nod &n);
@@ -52,6 +53,12 @@ int Nod::operator =(Nod &n)
     return this->info==n.info;
 }
 
+int Nod::operator !=(Nod &n)
+{
+     if(this->info != n.info)
+        return true;
+     else return false ;
+}
 
 istream& operator>>(istream& t, Nod &n){
     cout<<"Citeste info la nod : ";
@@ -60,7 +67,7 @@ istream& operator>>(istream& t, Nod &n){
 }
 
 ostream& operator<<(ostream& v, Nod &n){
-    v<<n.info<<" , ";
+    v<<n.info<<" ; ";
     return v;
 }
 
@@ -79,7 +86,9 @@ public:
     void pop ();
     coada operator - ( coada& c);
     coada operator + ( coada &c);
+    bool operator == (coada &coada);
     coada copie();
+    bool identic(Nod *n1,Nod* n2);
     friend ostream& operator<<(ostream& out, coada&);
     friend istream& operator>>(istream& in, coada&);
 
@@ -117,6 +126,7 @@ void coada::push(Nod n)//adaugare nod
         ultim=p;
     }
 }
+
 
 
 void coada::pop ()
@@ -182,11 +192,12 @@ istream& operator>>(istream& r, coada& coada){
 
 coada coada::operator - (coada& c)
 {
-    while(c.getFirst()->getInfo() == this->getFirst()->getInfo())
+    if(identic(c.prim,this->prim) == 0)
     {
         c.pop();
         this->pop();
     }
+
     return *this;
 }
 
@@ -212,144 +223,50 @@ coada coada::operator + (coada& c)
     }
     return t;
 }
+//am creat functia identic petru a compara nodurile si a trece la urmatoarele
+bool coada::identic(Nod *n1, Nod *n2)
+{
+    if(n1==NULL && n2==NULL)
+        return true ;
+    else {
+        if(n1==NULL || n2==NULL)
+            return false;
+        if(n1->info == n2->info)
+            return identic(n1->next,n2->next);
+        else return false ;
+    }
+}
 
-
+bool coada::operator ==(coada &coada)
+{
+    if(identic(this->getFirst(),coada.getFirst()))
+       return true;
+    else return false;
+}
 
 int main()
 {
-    cout<<"1. Tastatura  \n 2. Fisier \n";
-    int vala;
-    cin>>vala;
-    switch(vala)
-    {
-    case 1:
-        {
-    int val;
-    cout<<"Alege : \n 1. Push \n 2. Pop \n 3. Top \n 4. Afisare coada \n 5. Concatenare \n 6. Diferenta \n 7. Citire coada de la tastatura \n  ";
-    cout<<"\n Alegerea este :";
-    cin>>val;
-    coada coada,c1,rez,c2;
-    switch(val)
-    {
-    case 1:
-        {
-            cout<<"Adauga nodul";
-            int info;
-            cin>>info;
-            coada.push(info);
-        };
-        break;
-    case 2:
-        {
-            cout<<"Se sterge primul nod ";
-            coada.pop();
-        };
-        break;
-    case 3:
-        {
-            cout<<"Afiseaza varful cozii :";
-            coada.top();
-        };
-        break;
-    case 4:
-        {
-            cout<<"Coada este : ";
-            cout<<coada;
-        };
-        break;
-    case 5:
-        {
-            cout<<"Concatenare : ";
-            cin>>c1;
-            cin>>c2;
-            rez=c2+c1;
-            cout<<rez;
-        };
-        break;
-    case 6:
-        {
-          cout<<"Diferenta a doua cozi : ";
-          cin>>c1;
-          cin>>c2;
-          rez=c2-c1;
-          cout<<rez;
-        };
-        break;
-    case 7:
-        {
-            cout<<"Citire coada de la tastatura : ";
-            cin>>coada;
-        };
-        break;
-    default: cout<<"Comanda incorecta :) \n Pentru terminare apasati 0 ";
-    break;
-    }
-        }
-        break;
-    case 2:
-        {
-           int val;
-    cout<<"Alege : \n 1. Push \n 2. Pop \n 3. Top \n 4. Afisare coada \n 5. Concatenare \n 6. Diferenta \n 7. Citire coada de la tastatura \n  ";
-    cout<<"\n Alegerea este :";
-    f>>val;
-    coada coada,c1,rez,c2;
-    switch(val)
-    {
-    case 1:
-        {
-            cout<<"Adauga nodul";
-            int info;
-            f>>info;
-            coada.push(info);
-        };
-        break;
-    case 2:
-        {
-            cout<<"Se sterge primul nod ";
-            coada.pop();
-        };
-        break;
-    case 3:
-        {
-            cout<<"Afiseaza varful cozii :";
-            coada.top();
-        };
-        break;
-    case 4:
-        {
-            cout<<"Coada este : ";
-            cout<<coada;
-        };
-        break;
-    case 5:
-        {
-            cout<<"Concatenare : ";
-            f>>c1;
-            f>>c2;
-            rez=c2+c1;
-            cout<<rez;
-        };
-        break;
-    case 6:
-        {
-          cout<<"Diferenta a doua cozi : ";
-          f>>c1;
-          f>>c2;
-          rez=c2-c1;
-          cout<<rez;
-        };
-        break;
-    case 7:
-        {
-            cout<<"Citire coada de la tastatura : ";
-            f>>coada;
-        };
-        break;
-    default: cout<<"Comanda incorecta :) \n Pentru terminare apasati 0 ";
-    break;
-        }
-        break;
-        }
-    return 0;
-}
+
+coada c1,c2;
+c1.push(Nod(2));
+c1.push(Nod(3));
+c1.push(Nod(4));
+c2.push(Nod(2));
+c2.push(Nod(3));
+c2.pop();
+cout<<"Afisare coada c2 :"<<c2;
+cout<<'\n';
+cout<<"Primul element din coada  c1 : "<<*c1.getFirst()<<"\nUltimul element din coada c1 : "<<*c1.getLast();
+cout<<'\n';
+//am avut de construit operatorul == care compara doua cozi
+cout<<"Sunt cozile c1 si c2 egale ? \n";
+if(c1==c2)
+    cout<<"Egale \n";
+else
+    cout<<"Nu sunt egale \n";
+
+coada rez;
+rez=c1-c2;
+cout<<"Coada stearsa :"<<rez;
+return 0;
 }
